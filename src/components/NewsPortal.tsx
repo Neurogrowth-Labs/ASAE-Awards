@@ -15,7 +15,7 @@ interface Article {
   title: string;
   excerpt: string;
   content: string[];
-  category: 'Awards' | 'Business' | 'Innovation' | 'Leadership' | 'Africa' | 'Interviews';
+  category: 'Awards' | 'Business' | 'Innovation' | 'Leadership' | 'Africa' | 'Interviews' | 'Conference and Awards';
   author: string;
   role: string;
   date: string;
@@ -42,11 +42,11 @@ const MOCK_ARTICLES: Article[] = [
       'Leading investors suggest that the next twelve months will usher in broader regulatory alignments. With SADC working towards harmonized digital passporting, startups in Luanda can soon capture larger markets across South Africa with minimal friction, creating a truly unified economic playground.',
       'Ultimately, this digital bridge isn\'t just about capital exchange; it represents a mutual transfer of technology. While South African funds provide scale, Angolan innovators supply deep cultural mastery of local consumer preferences, paving the way for a highly integrated SADC tech landscape.'
     ],
-    author: 'Emanuel Catumbela',
+    author: 'ASAE Editorial',
     role: 'SADC Senior Tech Analyst',
     date: 'June 18, 2026',
     readTime: '6 min read',
-    image: 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://media.cnn.com/api/v1/images/stellar/prod/angotic-2.jpg?q=w_1110,c_fill',
     views: 18450,
     ctr: '3.8%'
   },
@@ -62,11 +62,11 @@ const MOCK_ARTICLES: Article[] = [
       'This efficiency represents a substantial victory for manufacturers, particularly in the agricultural and heavy industrial sectors. Reducing oceanic transport wait times directly preserves shelf lives and eliminates thousands of dollars in refrigeration overheads.',
       'SADC economic researchers estimate that maritime volume could spike by 25% by late 2026. This bodes exceptionally well for small and medium enterprises which previously found cross-border shipping cost-prohibitive.'
     ],
-    author: 'Naledi Dlamini',
+    author: 'ASAE Ediorial',
     role: 'Logistics Architecture Lead',
     date: 'June 17, 2026',
     readTime: '4 min read',
-    image: 'https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://issafrica.s3.amazonaws.com/site/images/banners/1777454604568-2026-04-29-iss-today-banner.jpg',
     views: 12110,
     ctr: '2.9%'
   },
@@ -82,31 +82,31 @@ const MOCK_ARTICLES: Article[] = [
       'Industry experts describe this unified license as the holy grail of regional trade. Reducing entry hurdles will not only stimulate fintech scaling but will also drive consumer remittance costs down to record lows.',
       'If the Cape Town discussions yield a signed protocol, initial pilot tests could launch as early as December 2026, forever changing SADC monetary mobility.'
     ],
-    author: 'James Valerio',
+    author: 'ASAE Ediorial',
     role: 'Macro Finance Analyst',
     date: 'June 15, 2026',
     readTime: '5 min read',
-    image: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://web-assets.bcg.com/12/39/634c39b3427892fde8f2eb2f5f5c/hero-edit.jpg',
     views: 9340,
     ctr: '3.1%'
   },
   {
     id: 'art-4',
-    category: 'Awards',
+    category: 'Conference and Awards',
     title: 'The Golden Gala: ASAE Celebration Anchored in Cape Town maritime Elegance',
     excerpt: 'Detailed review of the upcoming awards evening celebrating Angolans thriving in South Africa, from enterprise pioneers to cultural trendsetters.',
     content: [
-      'As the date of the 2026 ASAE Gala moves closer, preparations have accelerated around the prestigious V&A Waterfront venue in Cape Town. The selection highlights the region\'s oceanic beauty as a backdrop for celebrating Pan-African triumph.',
+      'As the date of the 26-27 November 2026 ASAE Gala moves closer, preparations have accelerated around the prestigious V&A Waterfront venue in Cape Town. The selection highlights the region\'s oceanic beauty as a backdrop for celebrating Pan-African triumph.',
       'This year\'s nominee files demonstrate the extraordinary diversity of the Angolan diaspora. From innovators managing multi-million dollar finance structures to visionary visual artists and academic leaders, the breadth of cross-border excellence is breathtaking.',
       'Beyond simple celebration, the gala serves as a premier engine of high-level diplomatic networking. Business summits matching South African infrastructure funds with Angolan development opportunities will run parallel to the red-carpet receptions.',
       'Organizing teams have confirmed that visual themes will marry modern architectural aesthetics with traditional Angolan Samba history, creating an unforgettable cultural environment for delegates.',
       'Tickets continue to see record-breaking volumes from Luanda, Johannesburg, and Durban, establishing the 2026 gala as the defining networking gala of the season.'
     ],
-    author: 'Sandra Neto',
+    author: 'ASAE Editorial',
     role: 'Arts & Culture Lead Advocate',
     date: 'June 14, 2026',
     readTime: '4 min read',
-    image: 'https://images.unsplash.com/photo-1469371670807-013ccf25f16e?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.squarespace-cdn.com/content/v1/6441f90ef5769311158053d2/7eb48472-af3e-4fca-b217-6d0bbd2b8356/250813_Noel+Leeming+D2-65.jpg?format=1500w',
     views: 14204,
     ctr: '4.5%'
   },
@@ -122,11 +122,11 @@ const MOCK_ARTICLES: Article[] = [
       'Environmental parameters also play a main role. Funding packages require developers to commit to rigorous soil preservation and low-emission building techniques, aligning with global sustainable development indexes.',
       'Success in these state alliances would establish a robust blueprint for other regional economic blocks on the continent, showing how sovereign reserves can drive collective prosperity.'
     ],
-    author: 'Dr. Antonio Domingos',
+    author: 'ASAE Editorial',
     role: 'Macroeconomic Council Advisor',
     date: 'June 11, 2026',
     readTime: '7 min read',
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPHR1at0_6cAHBeY3mY44vs9sxVHuSIE-hdg&s',
     views: 8900,
     ctr: '2.2%'
   },
@@ -142,11 +142,11 @@ const MOCK_ARTICLES: Article[] = [
       'Developers report that urban populations are extremely eager for mixed-use neighborhoods. Combining commercial offices, residential blocks, and green community spaces directly boosts social interactions and local retail economies.',
       'As financial channels become more transparent, experts predict that SADC investment into major developments will double over the next three years, cementing real estate as a primary pillar of regional growth.'
     ],
-    author: 'Clara Gonga',
+    author: 'ASAE Editorial',
     role: 'Urban Planning Correspondent',
     date: 'June 09, 2026',
     readTime: '8 min read',
-    image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://cdn.ca.emap.com/wp-content/uploads/sites/12/2017/05/angola.jpg',
     views: 11250,
     ctr: '3.4%'
   },
@@ -162,11 +162,11 @@ const MOCK_ARTICLES: Article[] = [
       'Linguistic studies will also explore the fascinating cross-pollenation of Portuguese, English, and Bantu languages across SADC hubs, highlighting centuries of cultural trade.',
       'Funding grants supported by private sponsors guarantee that research outputs are open-access, ensuring policy makers and local school grids can freely benefit from this knowledge.'
     ],
-    author: 'Prof. Joao Gouveia',
+    author: 'ASAE Editorial',
     role: 'Bilateral Science Council Chair',
     date: 'June 06, 2026',
     readTime: '5 min read',
-    image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://hsrc.ac.za/wp-content/uploads/2025/03/Article-10-Image-7.jpg',
     views: 10400,
     ctr: '2.5%'
   }
@@ -188,11 +188,11 @@ const SPONSORED_ARTICLES: Object[] = [
       'SADC businesses can now enjoy rapid, low-latency data replication, secure cloud systems, and pristine real-time video communications. This is a game-changer for high-frequency financial platforms and shipping networks.',
       'By offering customizable bandwidth pricing packages and robust disaster-recovery protocols, Unitel ensures that small business owners and massive corporations alike can comfortably scale in the digital sector.'
     ],
-    author: 'Unitel Enterprise',
+    author: 'ASAE Editorial',
     role: 'Corporate Communications',
     date: 'Sponsored Feature',
     readTime: '3 min read',
-    image: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://techafricanews.com/wp-content/uploads/2026/06/UNitel-.png',
     views: 24100,
     ctr: '5.2%'
   },
@@ -214,7 +214,7 @@ const SPONSORED_ARTICLES: Object[] = [
     role: 'Trade Desk Insights',
     date: 'Sponsored Feature',
     readTime: '3 min read',
-    image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://www.moneyweb.co.za/wp-content/uploads/2014/07/Standard-Bank-7-1024x683.jpg',
     views: 19800,
     ctr: '4.8%'
   }
