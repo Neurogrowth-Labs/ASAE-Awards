@@ -1,5 +1,4 @@
 import { motion } from 'motion/react';
-import asaeLogo from '../assets/images/asae_logo_1781797572399.jpg';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -21,21 +20,6 @@ const itemVariants = {
       type: 'spring',
       stiffness: 60,
       damping: 16,
-    },
-  },
-};
-
-const logoVariants = {
-  hidden: { opacity: 0, scale: 0.8, rotate: -10 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    rotate: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 80,
-      damping: 15,
-      delay: 0.1,
     },
   },
 };
@@ -87,22 +71,6 @@ export default function Hero() {
         animate="visible"
         className="relative z-10 text-center max-w-4xl px-8 flex flex-col items-center"
       >
-        {/* Logo with gentle floating micro-animation */}
-        <motion.div
-          variants={logoVariants}
-          className="mb-6 relative group"
-          whileHover={{ scale: 1.05 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-        >
-          <div className="absolute -inset-1.5 bg-gradient-to-r from-gold to-gold-light rounded-full blur-md opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-          <img 
-            src={asaeLogo} 
-            alt="ASAE Awards Logo" 
-            className="relative w-24 h-24 md:w-28 md:h-28 object-cover rounded-full border-2 border-gold/40 shadow-2xl shadow-gold/20"
-            referrerPolicy="no-referrer"
-          />
-        </motion.div>
-
         {/* Cape Town · 2026 Strip */}
         <motion.div 
           variants={itemVariants}

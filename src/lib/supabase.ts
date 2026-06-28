@@ -76,7 +76,13 @@ function mapKeys(obj: any, toCamel = true) {
 // Gentle error handler to prevent crashing or heavy error logs if tables aren't yet created
 function handleSupabaseError(action: string, err: any) {
   const errMsg = err?.message || String(err);
-  const isTableMissing = err?.code === '42P01' || errMsg.includes('relation') || errMsg.includes('does not exist') || errMsg.includes('not found');
+  const isTableMissing = 
+    err?.code === '42P01' || 
+    errMsg.includes('relation') || 
+    errMsg.includes('does not exist') || 
+    errMsg.includes('not found') || 
+    errMsg.includes('Could not find') || 
+    errMsg.includes('schema cache');
   if (isTableMissing) {
     console.info(`[Supabase Connection Info] Table not yet available during "${action}": ${errMsg}. Seamlessly falling back to local simulation data.`);
   } else {
