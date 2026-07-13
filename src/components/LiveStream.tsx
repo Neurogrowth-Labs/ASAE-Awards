@@ -27,7 +27,7 @@ export function LiveStream() {
             </span>
           </div>
           <h2 className="font-serif text-4xl md:text-5xl font-bold leading-[1.15] text-ivory">
-            ASAE Gala Event <span className="text-gold">2026</span>
+            ASAE Gala Event <span className="text-gold">2027</span>
           </h2>
           <p className="font-sans text-dim mt-4 max-w-2xl mx-auto">
             Experience the excellence in real-time. Watch the continuous showcase of Pan-African leadership live on our integrated player or directly on YouTube.

@@ -582,7 +582,20 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   const [posts, setPosts] = useState<BlogPost[]>(() => {
     try {
       const saved = localStorage.getItem("blogs");
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          return parsed.map((b: any) => {
+            if (b.id === 'MAG-01' && (b.image?.includes('photo-1544924799-79a10dd06a2e') || !b.image)) {
+              return {
+                ...b,
+                image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=800'
+              };
+            }
+            return b;
+          });
+        }
+      }
     } catch (e) {
       console.error(e);
     }
@@ -607,7 +620,7 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
         author: 'ASAE Executive Board',
         excerpt: 'The official digital compilation featuring peer-voted business champions, macroeconomic outlooks, and luxury sponsor showcases.',
         content: 'Welcome to Edition #4 of ASAE Excellence Digital. In this edition, we run deep profiles on our leading nominees, highlight the state of regional fintech networks, and provide our attendees with complete scheduling details for our major keynote summits.',
-        image: 'https://images.unsplash.com/photo-1544924799-79a10dd06a2e?auto=format&fit=crop&q=80&w=800',
+        image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=800',
         type: 'Magazine',
         status: 'Published',
         dateCreated: '2026-06-15',

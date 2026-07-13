@@ -232,6 +232,10 @@ const mapBlogToArticle = (blog: any): Article => {
   } else if (typeof blog.content === 'string') {
     paragraphs = blog.content.split('\n').filter((p: string) => p.trim().length > 0);
   }
+  let imgUrl = blog.image || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=400&q=80';
+  if (imgUrl.includes('photo-1544924799-79a10dd06a2e')) {
+    imgUrl = 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=800';
+  }
   return {
     id: blog.id || `blog-${Math.random()}`,
     title: blog.title || '',
@@ -242,7 +246,7 @@ const mapBlogToArticle = (blog: any): Article => {
     role: blog.role || 'Contributor',
     date: blog.date || new Date().toLocaleDateString(),
     readTime: blog.readTime || '3 min read',
-    image: blog.image || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=400&q=80',
+    image: imgUrl,
     views: blog.views || 0,
     ctr: '2.5%'
   };
@@ -260,7 +264,18 @@ export function NewsPortal() {
     try {
       const storedBlogs = localStorage.getItem('blogs');
       if (storedBlogs) {
-        const blogsList = JSON.parse(storedBlogs);
+        let blogsList = JSON.parse(storedBlogs);
+        if (Array.isArray(blogsList)) {
+          blogsList = blogsList.map((b: any) => {
+            if (b.id === 'MAG-01' && (b.image?.includes('photo-1544924799-79a10dd06a2e') || !b.image)) {
+              return {
+                ...b,
+                image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800'
+              };
+            }
+            return b;
+          });
+        }
         const publishedArticles = blogsList
           .filter((b: any) => b.status === 'Published')
           .map(mapBlogToArticle);

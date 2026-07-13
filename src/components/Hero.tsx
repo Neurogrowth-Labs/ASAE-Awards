@@ -71,13 +71,13 @@ export default function Hero() {
         animate="visible"
         className="relative z-10 text-center max-w-4xl px-8 flex flex-col items-center"
       >
-        {/* Cape Town · 2026 Strip */}
+        {/* Cape Town · 2027 Strip */}
         <motion.div 
           variants={itemVariants}
           className="font-sans text-[12px] font-bold tracking-[0.3em] uppercase text-gold flex items-center justify-center gap-4 mb-8 w-full"
         >
           <span className="flex-1 h-px bg-gradient-to-r from-transparent to-gold"></span>
-          Cape Town · 2026
+          Cape Town · 2027
           <span className="flex-1 h-px bg-gradient-to-l from-transparent to-gold"></span>
         </motion.div>
 

@@ -7,50 +7,43 @@ const winners = [
     name: 'Leila Lopes',
     category: 'Beauty, Fashion & Social Advocacy',
     description: 'Former Miss Universe 2011, beauty pageants, brand ambassadorship, philanthropy, HIV/AIDS awareness, and pageant administration. She currently leads the Miss Angola organization.',
-    img: 'https://media.licdn.com/dms/image/v2/D4E03AQESfuS86PazTg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1704560155347?e=1783555200&v=beta&t=YJHFIXyjte6nWcAl3J7HyBzwKe2VAV59cVzaLS4ooSY'
+    img: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=800&q=80'
   },
   {
     year: '2026',
     name: 'Maria Borges',
     category: 'Fashion & Modeling',
     description: "International fashion model, luxury brand ambassador, runway modeling, fashion campaigns, and media. She has worked with major global fashion houses and was a Victoria's Secret model.",
-    img: 'https://s3.r29static.com/bin/entry/148/x/1786645/image.png'
+    img: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=800&q=80'
   },
   {
     year: '2026',
     name: 'Paulo Flores',
     category: 'Music & Entertainment',
     description: "Musician, singer, songwriter, cultural ambassador, and one of Angola's most influential Semba artists.",
-    img: 'https://bordalo.observador.pt/v2/q:60/rs:fill:940/c:1844:2129:nowe:122:111/plain/https://s3.observador.pt/wp-content/uploads/2026/02/27145021/pauloflores-045.jpg'
+    img: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80'
   },
   {
     year: '2026',
     name: 'Ivanilson Machado',
     category: 'Media, Journalism & Broadcasting',
     description: 'Chief Executive Officer of Pumangol. Television, radio, journalism, media production, communications, and public engagement.',
-    img: 'https://media.licdn.com/dms/image/v2/D4D03AQHU81SJsA5a8Q/profile-displayphoto-shrink_400_400/B4DZOncLDpGUAg-/0/1733681007801?e=1783555200&v=beta&t=NwvXcJNHuuAoDUn-PkbsVLeDk4Byi7CDGijbsdV3Akw'
-  },
-  {
-    year: '2026',
-    name: 'Isabel dos Santos',
-    category: 'Business, Investment & Telecommunications',
-    description: "Investments, banking, telecommunications, energy, retail, finance, and venture capital. She is widely known as one of Africa's most prominent business figures.",
-    img: 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Isabel_dos_Santos_%28cropped%29.jpg'
+    img: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80'
   },
   {
     year: '2026',
     name: 'Jean-Claude Bastos de Morais',
     category: 'Investment Management, Finance & Venture Capital',
     description: 'Entrepreneur, private equity, infrastructure investment, asset management, innovation funding, and strategic investment across Africa through Quantum Global.',
-    img: 'https://media.licdn.com/dms/image/v2/C5603AQE41VEeuECAKg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1517514971318?e=1783555200&v=beta&t=mEstAk-EUotoXBdyulkaojDvo2dph70722JEmGrT4wo'
+    img: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80'
   },
   {
     year: '2026',
     name: 'Agostinho Kapaia',
     category: 'Chairman of the Board and CEO of OPAIA Group SA',
     description: 'Entrepreneur, private equity, Automotive and Distibution, asset management, innovation funding, and strategic investment across Africa through Quantum Global.',
-    img: 'https://clubofmozambique.com/wp-content/uploads/2026/06/kapaya.fb_.jpg'
-    }
+    img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80'
+  }
 ];
 
 export function Gallery() {
