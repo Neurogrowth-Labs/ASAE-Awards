@@ -15,11 +15,11 @@ export function Speakers() {
         <div className="text-center mb-16">
           <div className="font-sans font-bold text-[10px] tracking-[5px] uppercase text-gold flex items-center justify-center gap-4 mb-5">
             <span className="w-8 h-px bg-gold"></span>
-            Visionaries
+            ASAE Conference 27
             <span className="w-8 h-px bg-gold"></span>
           </div>
           <h2 className="font-serif text-4xl md:text-5xl font-bold leading-[1.15]">
-            Featured <span className="text-gold">Speakers</span>
+            Proposed <span className="text-gold">Speakers</span>
           </h2>
         </div>
 

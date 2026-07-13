@@ -32,6 +32,7 @@ import {
 import asaeLogo from '../assets/images/asae_logo_1781797572399.jpg';
 import { saveSupabaseTransaction } from '../lib/supabase';
 import { useToast } from './Toast';
+import { GooglePayButton } from './GooglePayButton';
 
 interface Category {
   id: string;
@@ -42,15 +43,16 @@ interface Category {
 }
 
 const CATEGORIES: Category[] = [
-  { id: 'student', name: 'Student Delegate', description: 'Undergraduate/Postgraduate individuals', priceZar: 500, priceUsd: 30 },
-  { id: 'professional', name: 'Professional Delegate', description: 'Individual professional practitioner', priceZar: 2500, priceUsd: 150 },
-  { id: 'corporate', name: 'Corporate Table', description: 'Company Representative & delegation (Table of 10)', priceZar: 45000, priceUsd: 2600 },
+  { id: 'student', name: 'Student Delegate', description: 'Undergraduate/Postgraduate individuals', priceZar: 0, priceUsd: 0 },
+  { id: 'professional', name: 'Delegate', description: 'Standard professional summit access', priceZar: 1500, priceUsd: 90 },
+  { id: 'individual', name: 'Individual professional practitioner', description: 'Individual professional practitioner / Sole trader access', priceZar: 2500, priceUsd: 150 },
+  { id: 'company', name: 'Company Representative & delegation', description: 'Company Representative & delegation (Table of 10)', priceZar: 45000, priceUsd: 2600 },
   { id: 'vip', name: 'VIP Delegate', description: 'Outside Africa / Executive access and lounge privileges', priceZar: 5000, priceUsd: 290 },
-  { id: 'virtual', name: 'Virtual Delegate', description: 'Online attendance with access to full live streams', priceZar: 1500, priceUsd: 90 },
+  { id: 'virtual', name: 'Virtual Delegate', description: 'Online attendance with access to full live streams', priceZar: 500, priceUsd: 30 },
 ];
 
 interface RegistrationWizardProps {
-  initialCategory?: string; // matching 'student' | 'professional' | 'corporate' | 'vip' | 'virtual'
+  initialCategory?: string; // matching 'student' | 'professional' | 'individual' | 'company' | 'vip' | 'virtual'
   onClose: () => void;
 }
 
@@ -74,7 +76,7 @@ export function RegistrationWizard({ initialCategory, onClose }: RegistrationWiz
   const [profilePicName, setProfilePicName] = useState<string>('');
 
   // Payment states
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'bank' | 'momo' | 'intel'>('card');
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'gpay' | 'bank' | 'momo' | 'intel'>('card');
   const [processingState, setProcessingState] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -116,12 +118,14 @@ export function RegistrationWizard({ initialCategory, onClose }: RegistrationWiz
       const normalized = initialCategory.toLowerCase();
       if (normalized.includes('vip')) {
         setSelectedCatId('vip');
-      } else if (normalized.includes('corporate')) {
-        setSelectedCatId('corporate');
+      } else if (normalized.includes('corporate') || normalized.includes('company')) {
+        setSelectedCatId('company');
       } else if (normalized.includes('student')) {
         setSelectedCatId('student');
       } else if (normalized.includes('virtual')) {
         setSelectedCatId('virtual');
+      } else if (normalized.includes('individual')) {
+        setSelectedCatId('individual');
       } else {
         setSelectedCatId('professional');
       }
@@ -146,7 +150,7 @@ export function RegistrationWizard({ initialCategory, onClose }: RegistrationWiz
       amount: selectedCategory.priceZar,
       date: new Date().toISOString().substring(0, 10),
       status: confirmedStatus === 'Paid' ? 'Completed' : 'Pending',
-      tier: selectedCatId === 'vip' ? 'Platinum' : selectedCatId === 'corporate' ? 'Gold' : 'Member',
+      tier: selectedCatId === 'vip' ? 'Platinum' : selectedCatId === 'company' ? 'Gold' : 'Member',
       country: country,
       delegateId: del,
       email: email
@@ -208,6 +212,31 @@ export function RegistrationWizard({ initialCategory, onClose }: RegistrationWiz
       'User PIN requested on Mobile Device...',
       'Validating ledger ledger ledger...',
       'Mobile Wallet payment confirmed!'
+    ];
+
+    let current = 0;
+    setProcessingState(states[0]);
+
+    const interval = setInterval(() => {
+      current++;
+      if (current < states.length) {
+        setProcessingState(states[current]);
+      } else {
+        clearInterval(interval);
+        setIsProcessing(false);
+        handlePaymentSuccess('Paid');
+      }
+    }, 1300);
+  };
+
+  const startGpayFlow = () => {
+    setIsProcessing(true);
+    const states = [
+      'Initializing Google Pay Secure Handshake...',
+      'Validating Tokenized Payment Account...',
+      'Authorizing GPay Multi-Factor Security...',
+      'Verifying Sovereign Transaction Clearing...',
+      'Google Pay Gateway payment confirmed!'
     ];
 
     let current = 0;
@@ -719,10 +748,21 @@ export function RegistrationWizard({ initialCategory, onClose }: RegistrationWiz
                     <ArrowLeft className="w-4 h-4" /> Back
                   </button>
                   <button 
-                    onClick={() => setStep(4)}
-                    className="flex items-center gap-2 px-8 py-3.5 bg-gold hover:bg-gold-light text-dark text-xs uppercase font-sans font-bold tracking-[2px] rounded-lg shadow-lg shadow-gold/10 transition-all font-semibold"
+                    onClick={() => {
+                      if (selectedCategory.priceZar === 0) {
+                        setIsProcessing(true);
+                        setProcessingState('Registering your complimentary delegate profile...');
+                        setTimeout(() => {
+                          setIsProcessing(false);
+                          handlePaymentSuccess('Paid');
+                        }, 1200);
+                      } else {
+                        setStep(4);
+                      }
+                    }}
+                    className="flex items-center gap-2 px-8 py-3.5 bg-gold hover:bg-gold-light text-dark text-xs uppercase font-sans font-bold tracking-[2px] rounded-lg shadow-lg shadow-gold/10 transition-all font-semibold cursor-pointer"
                   >
-                    Proceed to Payment <ArrowRight className="w-4 h-4" />
+                    {selectedCategory.priceZar === 0 ? "Complete Free Registration" : "Proceed to Payment"} <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </motion.div>
@@ -763,12 +803,25 @@ export function RegistrationWizard({ initialCategory, onClose }: RegistrationWiz
                       </button>
 
                       <button 
+                        onClick={() => setPaymentMethod('gpay')}
+                        className={`w-full text-left p-4 rounded-xl border flex items-center gap-3 transition-all ${paymentMethod === 'gpay' ? 'border-gold bg-gold/5 text-gold' : 'border-white/5 bg-dark-card text-ivory/60 hover:text-ivory'}`}
+                      >
+                        <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M17.05 2h-10.1C5.32 2 4 3.32 4 4.95v14.1C4 20.68 5.32 22 6.95 22h10.1c1.63 0 2.95-1.32 2.95-2.95V4.95C20 3.32 18.68 2 17.05 2zm-5.05 18c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
+                        </svg>
+                        <div>
+                          <span className="font-serif font-bold text-xs block uppercase">Google Pay</span>
+                          <span className="text-[9px] text-dim block mt-0.5">Express tokenized wallet</span>
+                        </div>
+                      </button>
+
+                      <button 
                         onClick={() => setPaymentMethod('bank')}
                         className={`w-full text-left p-4 rounded-xl border flex items-center gap-3 transition-all ${paymentMethod === 'bank' ? 'border-gold bg-gold/5 text-gold' : 'border-white/5 bg-dark-card text-ivory/60 hover:text-ivory'}`}
                       >
                         <Building className="w-5 h-5" />
                         <div>
-                          <span className="font-serif font-bold text-xs block uppercase">Bank Transfer (EFT)</span>
+                          <span className="font-serif font-bold text-xs block uppercase">EFT Bank Transfer</span>
                           <span className="text-[9px] text-dim block mt-0.5">Direct sovereign invoice</span>
                         </div>
                       </button>
@@ -863,6 +916,27 @@ export function RegistrationWizard({ initialCategory, onClose }: RegistrationWiz
                           >
                             Pay R{selectedCategory.priceZar.toLocaleString()} Now
                           </button>
+                        </div>
+                      )}
+
+                      {paymentMethod === 'gpay' && (
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between border-b border-white/5 pb-3">
+                            <h5 className="font-serif text-sm font-bold text-gold uppercase tracking-wider">Google Pay Gateway</h5>
+                            <span className="text-[9px] text-dim font-mono bg-white/5 px-2 py-1 rounded">Google Pay API</span>
+                          </div>
+
+                          <p className="text-xs text-dim leading-relaxed">
+                            Complete your registration securely with Google Pay. Your saved billing cards will be authorized instantly via a secure pop-up tokenization dialog.
+                          </p>
+
+                          <div className="p-6 bg-dark rounded-xl border border-white/5">
+                            <GooglePayButton 
+                              amountZar={selectedCategory.priceZar} 
+                              onSuccess={(status) => handlePaymentSuccess(status as 'Paid' | 'Pending')} 
+                              onStartFlow={() => {}} 
+                            />
+                          </div>
                         </div>
                       )}
 

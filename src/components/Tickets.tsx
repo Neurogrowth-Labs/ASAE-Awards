@@ -11,10 +11,10 @@ export function Tickets({ onBook }: TicketsProps) {
   const [copied, setCopied] = useState(false);
 
   const emailTarget = 'simao@neurogrowthlabs.co.za';
-  const emailSubject = 'ASAE Sustainability Summit 2026 - Corporate Table Reservation';
+  const emailSubject = 'ASAE Sustainability Summit 2027 - Company Delegation Table Reservation';
   const emailBody = `Dear ASAE Team,
 
-I am interested in reserving a Corporate Table (Table of 10) for the ASAE Sustainability Summit 2026. Please send us the booking invoice and delegation forms.
+I am interested in reserving a Company Delegation Table (Table of 10) for the ASAE Sustainability Summit 2027. Please send us the booking invoice and delegation forms.
 
 Thank you.
 
@@ -40,7 +40,7 @@ Kind regards,`;
     {
       id: 'student',
       name: 'Student Delegate',
-      price: 'R500',
+      price: 'Free',
       description: 'Undergraduate/Postgraduate individuals',
       benefits: [
         'Access to Plenary Address',
@@ -54,9 +54,9 @@ Kind regards,`;
     },
     {
       id: 'professional',
-      name: 'Professional Delegate',
-      price: 'R2,500',
-      description: 'Individual professional practitioner',
+      name: 'Delegate',
+      price: 'R1,500',
+      description: 'Standard professional summit access',
       benefits: [
         'Full 3-Day Plenary & Workshops',
         'Welcome Cocktails Invitation',
@@ -64,8 +64,38 @@ Kind regards,`;
         'Sovereign Trade Materials Packet'
       ],
       isPopular: true,
-      ctaLabel: 'BOOK PROFESSIONAL TICKET',
+      ctaLabel: 'BOOK DELEGATE TICKET',
       isEnquiry: false
+    },
+    {
+      id: 'individual',
+      name: 'Individual professional practitioner',
+      price: 'R2,500',
+      description: 'Individual professional practitioner / Sole trader access',
+      benefits: [
+        'Full 3-Day Plenary & Workshops',
+        'Welcome Cocktails Invitation',
+        'Earn CPD Points Certificate',
+        'Sovereign Trade Materials Packet'
+      ],
+      isPopular: false,
+      ctaLabel: 'BOOK PRACTITIONER TICKET',
+      isEnquiry: false
+    },
+    {
+      id: 'company',
+      name: 'Company Representative & delegation',
+      price: 'R45,000',
+      description: 'Company Representative & delegation (Table of 10)',
+      benefits: [
+        '10 × All-Access VIP Passes',
+        'Corporate Profile Panel Banner',
+        'Guaranteed Premier Seating Table',
+        'Company Logo in Summit brochure'
+      ],
+      isPopular: false,
+      ctaLabel: 'ENQUIRE NOW',
+      isEnquiry: true
     },
     {
       id: 'vip',
@@ -85,7 +115,7 @@ Kind regards,`;
     {
       id: 'virtual',
       name: 'Virtual Delegate',
-      price: 'R1,500',
+      price: 'R500',
       description: 'Online attendance with access to full live streams',
       benefits: [
         'Real-time Plenary Streams',
@@ -96,21 +126,6 @@ Kind regards,`;
       isPopular: false,
       ctaLabel: 'BOOK VIRTUAL TICKET',
       isEnquiry: false
-    },
-    {
-      id: 'corporate',
-      name: 'Corporate Table',
-      price: 'R45,000',
-      description: 'Company Representative & delegation (Table of 10)',
-      benefits: [
-        '10 × All-Access VIP Passes',
-        'Corporate Profile Panel Banner',
-        'Guaranteed Premier Seating Table',
-        'Company Logo in Summit brochure'
-      ],
-      isPopular: false,
-      ctaLabel: 'ENQUIRE NOW',
-      isEnquiry: true
     }
   ];
 
@@ -127,11 +142,11 @@ Kind regards,`;
             Ticket <span className="text-gold">Packages</span>
           </h2>
           <p className="text-sm text-dim mt-4 max-w-xl mx-auto leading-relaxed">
-            Select the delegate seating tier tailored to your delegation's objectives for the ASAE Sustainability Summit 2026.
+            Select the delegate seating tier tailored to your delegation's objectives for the ASAE Sustainability Summit 2027.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {ticketPackages.map((pkg, index) => (
             <motion.div 
               key={pkg.id}
@@ -155,7 +170,7 @@ Kind regards,`;
                 </div>
                 <div className="text-center mb-5 border-b border-white/5 pb-5">
                   <div className="font-serif text-3xl font-black text-ivory tracking-tight">{pkg.price}</div>
-                  <div className="text-[10px] text-dim mt-1 font-mono">{pkg.id === 'corporate' ? 'table of 10' : 'per delegate'}</div>
+                  <div className="text-[10px] text-dim mt-1 font-mono">{pkg.id === 'company' ? 'table of 10' : 'per delegate'}</div>
                 </div>
                 <p className="text-xs text-dim mb-6 text-center leading-relaxed h-10 line-clamp-2">
                   {pkg.description}
@@ -218,9 +233,9 @@ Kind regards,`;
                 <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center text-gold mx-auto mb-4">
                   <Mail className="w-6 h-6" />
                 </div>
-                <h3 className="font-serif text-xl font-bold text-ivory tracking-wide">Corporate Table Seating</h3>
+                <h3 className="font-serif text-xl font-bold text-ivory tracking-wide">Company Delegation Seating</h3>
                 <p className="text-xs text-dim mt-2 max-w-sm mx-auto leading-relaxed">
-                  Submit booking enquiry for Corporate Table seating tiers directly to <strong className="text-gold-pale">{emailTarget}</strong>.
+                  Submit booking enquiry for Company Delegation Table seating tiers directly to <strong className="text-gold-pale">{emailTarget}</strong>.
                 </p>
               </div>
 

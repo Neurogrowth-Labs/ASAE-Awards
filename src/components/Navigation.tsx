@@ -83,7 +83,7 @@ export default function Navigation() {
               Vote Now
             </a>
             <a href="#tickets" className="px-5 py-2 bg-transparent border border-gold/40 text-gold font-display text-[11px] tracking-[1.5px] transition-all hover:bg-gold/10 hover:border-gold">
-              Buy Tickets
+              View Tickets
             </a>
             <a href="#advertise" className="px-5 py-2 bg-gradient-to-tr from-gold via-gold-pale to-gold-light text-dark font-display text-[11px] tracking-[1.5px] font-black transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(201,162,39,0.6)] border border-gold-light">
               Advertise
@@ -136,7 +136,7 @@ export default function Navigation() {
                 Vote Now
               </a>
               <a href="#tickets" onClick={() => setMobileMenuOpen(false)} className="w-full text-center px-6 py-3 bg-transparent border border-gold/50 text-gold font-display text-sm tracking-[2px]">
-                Buy Tickets
+                View Tickets
               </a>
               <a href="#advertise" onClick={() => setMobileMenuOpen(false)} className="w-full text-center px-6 py-3 bg-gradient-to-tr from-gold to-gold-light text-dark font-display text-sm tracking-[2px] font-black">
                 Advertise

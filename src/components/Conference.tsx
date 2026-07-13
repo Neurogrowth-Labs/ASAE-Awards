@@ -48,11 +48,21 @@ export function ConferenceAndAwards() {
           {categories.map((cat, idx) => (
             <motion.div 
               key={idx}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              whileHover={{ 
+                y: -10,
+                scale: 1.04,
+                borderColor: "rgba(201, 162, 39, 0.4)",
+                backgroundColor: "rgba(20, 20, 20, 0.6)"
+              }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.05 }}
-              className="bg-dark-card border border-white/5 rounded-xl p-6 md:p-8 text-center transition-all duration-300 hover:border-gold/40 hover:-translate-y-2 relative group overflow-hidden shadow-xl"
+              transition={{ 
+                type: "spring",
+                stiffness: 260,
+                damping: 20
+              }}
+              className="bg-dark-card border border-white/5 rounded-xl p-6 md:p-8 text-center relative group overflow-hidden shadow-xl cursor-pointer"
             >
               <div className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
               <div className="w-[60px] h-[60px] rounded-full mx-auto mb-4 border border-gold/20 flex items-center justify-center bg-gold/5 group-hover:scale-115 group-hover:border-gold group-hover:bg-gold/15 transition-all duration-300 shadow-lg">

@@ -7,42 +7,42 @@ const winners = [
     name: 'Leila Lopes',
     category: 'Beauty, Fashion & Social Advocacy',
     description: 'Former Miss Universe 2011, beauty pageants, brand ambassadorship, philanthropy, HIV/AIDS awareness, and pageant administration. She currently leads the Miss Angola organization.',
-    img: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=800&q=80'
+    img: 'https://media.licdn.com/dms/image/v2/D4E03AQESfuS86PazTg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1704560155347?e=1785369600&v=beta&t=Xp_ZxrScgJuuYs2ie8CvumXQSSFbSqlD91YFDqmCuXg'
   },
   {
     year: '2026',
     name: 'Maria Borges',
     category: 'Fashion & Modeling',
     description: "International fashion model, luxury brand ambassador, runway modeling, fashion campaigns, and media. She has worked with major global fashion houses and was a Victoria's Secret model.",
-    img: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=800&q=80'
+    img: 'https://cdn.prod.website-files.com/632311c29a4f5364aba38727/6906143b9ea8a63f1558e653_eddf18a5146ce6dbf315469ed9865814_Screenshot%202025-11-01%20at%203.07.37%E2%80%AFPM.jpg'
   },
   {
     year: '2026',
     name: 'Paulo Flores',
     category: 'Music & Entertainment',
     description: "Musician, singer, songwriter, cultural ambassador, and one of Angola's most influential Semba artists.",
-    img: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80'
+    img: 'https://casadamusica.com/wp-content/uploads/2025/09/20260228-paulo-flores-cartao-1.jpg'
   },
   {
     year: '2026',
     name: 'Ivanilson Machado',
     category: 'Media, Journalism & Broadcasting',
     description: 'Chief Executive Officer of Pumangol. Television, radio, journalism, media production, communications, and public engagement.',
-    img: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80'
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/IM_Ivanilson_Machado_2025.jpg/250px-IM_Ivanilson_Machado_2025.jpg'
   },
   {
     year: '2026',
     name: 'Jean-Claude Bastos de Morais',
     category: 'Investment Management, Finance & Venture Capital',
     description: 'Entrepreneur, private equity, infrastructure investment, asset management, innovation funding, and strategic investment across Africa through Quantum Global.',
-    img: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80'
+    img: 'https://live.staticflickr.com/4441/37076763971_038f366c47_n.jpg'
   },
   {
     year: '2026',
     name: 'Agostinho Kapaia',
     category: 'Chairman of the Board and CEO of OPAIA Group SA',
     description: 'Entrepreneur, private equity, Automotive and Distibution, asset management, innovation funding, and strategic investment across Africa through Quantum Global.',
-    img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80'
+    img: 'https://clubofmozambique.com/wp-content/uploads/2026/06/kapaya.fb_.jpg'
   }
 ];
 
