@@ -105,8 +105,8 @@ export default function Hero() {
           variants={itemVariants}
           className="flex flex-wrap gap-4 justify-center"
         >
-          <a href="#vote" className="px-10 py-4 bg-gradient-to-br from-gold to-gold-light text-dark font-display text-xs tracking-[3px] font-bold transition-all hover:shadow-[0_8px_40px_rgba(201,162,39,0.6)] hover:-translate-y-0.5 [clip-path:polygon(12px_0%,100%_0%,calc(100%-12px)_100%,0%_100%)]">
-            VOTING PORTAL
+          <a href="#directory" className="px-10 py-4 bg-gradient-to-br from-gold to-gold-light text-dark font-display text-xs tracking-[3px] font-bold transition-all hover:shadow-[0_8px_40px_rgba(201,162,39,0.6)] hover:-translate-y-0.5 [clip-path:polygon(12px_0%,100%_0%,calc(100%-12px)_100%,0%_100%)]">
+            ASAE DIRECTORY
           </a>
           <a href="#gallery" className="px-10 py-4 bg-transparent border border-ivory/30 text-ivory font-display text-xs tracking-[3px] transition-all hover:border-gold hover:text-gold hover:-translate-y-0.5">
             VIEW HALL OF FAME

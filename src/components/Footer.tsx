@@ -31,7 +31,7 @@ export function Footer() {
   return (
     <footer className="bg-dark border-t border-white/5 py-20 px-6 md:px-12 relative z-40">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 mb-16">
           
           {/* Column 1: Brand */}
           <div className="lg:col-span-1">
@@ -68,7 +68,44 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Column 3: Custom Enquiry Access */}
+          {/* Column 3: Our Services */}
+          <div>
+            <h4 className="font-sans font-bold text-[10px] tracking-[3px] uppercase text-gold mb-6">Our Services</h4>
+            <div className="flex flex-col gap-3 font-sans text-sm text-ivory/50">
+              <a 
+                href="#services-journalism"
+                className="hover:text-gold text-left transition-colors font-sans text-sm w-fit cursor-pointer"
+              >
+                Journalism
+              </a>
+              <a 
+                href="#services-training"
+                className="hover:text-gold text-left transition-colors font-sans text-sm w-fit cursor-pointer"
+              >
+                Training Programs
+              </a>
+              <a 
+                href="#services-management"
+                className="hover:text-gold text-left transition-colors font-sans text-sm w-fit cursor-pointer"
+              >
+                Event Management
+              </a>
+              <a 
+                href="#services-host"
+                className="hover:text-gold text-left transition-colors font-sans text-sm w-fit cursor-pointer"
+              >
+                Event Host
+              </a>
+              <a 
+                href="#services-protocol"
+                className="hover:text-gold text-left transition-colors font-sans text-sm w-fit cursor-pointer"
+              >
+                Protocol Services
+              </a>
+            </div>
+          </div>
+
+          {/* Column 4: Custom Enquiry Access */}
           <div>
             <h4 className="font-sans font-bold text-[10px] tracking-[3px] uppercase text-gold mb-6">Company & Legal</h4>
             <div className="flex flex-col gap-3 font-sans text-sm text-ivory/50">
@@ -99,7 +136,7 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Column 4: Newsletter */}
+          {/* Column 5: Newsletter */}
           <div>
             <h4 className="font-sans font-bold text-[10px] tracking-[3px] uppercase text-gold mb-6">Newsletter</h4>
             <p className="font-sans text-sm text-ivory/50 mb-4 tracking-wide">

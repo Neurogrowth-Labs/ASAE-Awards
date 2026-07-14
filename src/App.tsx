@@ -16,6 +16,8 @@ import { Tickets } from './components/Tickets';
 import { Footer } from './components/Footer';
 import { RegistrationWizard } from './components/RegistrationWizard';
 import { CompanyPage, PageTab } from './components/CompanyPage';
+import { ServicesPage, ServiceTab } from './components/ServicesPage';
+import { DirectoryPage } from './components/DirectoryPage';
 import { ToastProvider } from './components/Toast';
 
 export default function App() {
@@ -29,7 +31,10 @@ export default function App() {
     const handleHashChange = () => {
       setCurrentHash(window.location.hash);
       // Automatically scroll to top on hash navigational views to make them feel like native pages
-      if (['#media', '#sponsorship', '#privacy', '#terms'].includes(window.location.hash)) {
+      if (
+        ['#media', '#sponsorship', '#privacy', '#terms', '#directory'].includes(window.location.hash) ||
+        window.location.hash.startsWith('#services')
+      ) {
         window.scrollTo({ top: 0, behavior: 'instant' });
       }
     };
@@ -42,11 +47,44 @@ export default function App() {
   const isDocPage = ['#media', '#sponsorship', '#privacy', '#terms'].includes(currentHash);
   const matchedTab = currentHash.replace('#', '') as PageTab;
 
+  // Determine if we should display a standalone services page
+  const isServicePage = currentHash.startsWith('#services');
+  const matchedServiceTab = (currentHash.includes('-')
+    ? currentHash.split('-')[1]
+    : 'journalism') as ServiceTab;
+
   if (isDocPage) {
     return (
       <ToastProvider>
         <CompanyPage 
           initialTab={matchedTab} 
+          onNavigateHome={() => {
+            window.location.hash = '';
+            setCurrentHash('');
+          }} 
+        />
+      </ToastProvider>
+    );
+  }
+
+  if (isServicePage) {
+    return (
+      <ToastProvider>
+        <ServicesPage 
+          initialService={matchedServiceTab} 
+          onNavigateHome={() => {
+            window.location.hash = '';
+            setCurrentHash('');
+          }} 
+        />
+      </ToastProvider>
+    );
+  }
+
+  if (currentHash === '#directory') {
+    return (
+      <ToastProvider>
+        <DirectoryPage 
           onNavigateHome={() => {
             window.location.hash = '';
             setCurrentHash('');
