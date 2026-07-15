@@ -18,7 +18,8 @@ import React, { useEffect, useRef, useState } from 'react';
 
 interface GooglePayButtonProps {
   amountZar?: number;
-  ticket?: { name: string; priceZAR: number; quantity: number };
+  ticket?: { name: string; priceZAR?: number; price?: number; currency?: string; quantity: number };
+  currencyCode?: string;
   onSuccess: (status: 'Paid' | 'Pending' | any) => void;
   onStartFlow?: () => void;
   onError?: (err: any) => void;
@@ -63,8 +64,14 @@ function getGooglePaymentsClient() {
   });
 }
 
-function buildPaymentDataRequest(ticket: { name: string; priceZAR: number; quantity: number }) {
-  const totalPrice = (ticket.priceZAR * ticket.quantity).toFixed(2);
+function buildPaymentDataRequest(ticket: { name: string; price: number; quantity: number }, currencyCode: string = 'ZAR') {
+  const totalPrice = (ticket.price * ticket.quantity).toFixed(2);
+  const countryCodeMap: Record<string, string> = {
+    'ZAR': 'ZA',
+    'USD': 'US',
+    'EUR': 'DE',
+    'AOA': 'AO'
+  };
 
   return {
     apiVersion: 2,
@@ -75,8 +82,8 @@ function buildPaymentDataRequest(ticket: { name: string; priceZAR: number; quant
       merchantName: 'ASAE Awards',
     },
     transactionInfo: {
-      countryCode: 'ZA',
-      currencyCode: 'ZAR',
+      countryCode: countryCodeMap[currencyCode] || 'ZA',
+      currencyCode: currencyCode,
       totalPriceStatus: 'FINAL',
       totalPrice,
       totalPriceLabel: 'Total',
@@ -84,7 +91,7 @@ function buildPaymentDataRequest(ticket: { name: string; priceZAR: number; quant
         {
           label: ticket.name,
           type: 'LINE_ITEM',
-          price: ticket.priceZAR.toFixed(2),
+          price: ticket.price.toFixed(2),
         },
       ],
     },
@@ -93,18 +100,20 @@ function buildPaymentDataRequest(ticket: { name: string; priceZAR: number; quant
   };
 }
 
-export function GooglePayButton({ amountZar, ticket, onSuccess, onStartFlow, onError }: GooglePayButtonProps) {
+export function GooglePayButton({ amountZar, ticket, currencyCode, onSuccess, onStartFlow, onError }: GooglePayButtonProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
   const [loadingPay, setLoadingPay] = useState(false);
   const [processingStep, setProcessingStep] = useState('');
   const paymentsClientRef = useRef<any>(null);
 
-  // Normalize ticket prop
-  const activeTicket = ticket || {
-    name: 'ASAE Summit Delegate Access',
-    priceZAR: amountZar || 0,
-    quantity: 1,
+  // Normalize ticket prop with multi-currency fallback
+  const activeTicket = {
+    name: ticket?.name || 'ASAE Summit Delegate Access',
+    priceZAR: ticket?.priceZAR !== undefined ? ticket.priceZAR : (amountZar || 0),
+    price: ticket?.price !== undefined ? ticket.price : (ticket?.priceZAR !== undefined ? ticket.priceZAR : (amountZar || 0)),
+    currency: ticket?.currency || currencyCode || 'ZAR',
+    quantity: ticket?.quantity || 1,
   };
 
   useEffect(() => {
@@ -164,7 +173,7 @@ export function GooglePayButton({ amountZar, ticket, onSuccess, onStartFlow, onE
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTicket.priceZAR]);
+  }, [activeTicket.price, activeTicket.currency]);
 
   async function handleClick(paymentsClient: any) {
     onStartFlow?.();
@@ -183,7 +192,11 @@ export function GooglePayButton({ amountZar, ticket, onSuccess, onStartFlow, onE
     });
 
     try {
-      const paymentDataRequest = buildPaymentDataRequest(activeTicket);
+      const paymentDataRequest = buildPaymentDataRequest({
+        name: activeTicket.name,
+        price: activeTicket.price,
+        quantity: activeTicket.quantity
+      }, activeTicket.currency);
       const paymentData = await paymentsClient.loadPaymentData(paymentDataRequest);
 
       // Google Pay tokenized checkout payload
@@ -203,6 +216,8 @@ export function GooglePayButton({ amountZar, ticket, onSuccess, onStartFlow, onE
           payerEmail,
           ticketName: activeTicket.name,
           quantity: activeTicket.quantity,
+          amount: activeTicket.price * activeTicket.quantity,
+          currency: activeTicket.currency,
           amountZAR: activeTicket.priceZAR * activeTicket.quantity,
         }),
       });

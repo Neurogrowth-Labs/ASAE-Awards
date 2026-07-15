@@ -1,19 +1,41 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  TrendingUp, Calendar, Clock, ArrowRight, User, Eye, Target, Sparkles, Search,
+  Calendar, Clock, ArrowRight, User, Eye, Target, Sparkles, Search,
   Building, ChevronRight, Check, Copy, Download, DollarSign, BarChart2, 
   Globe, Laptop, HelpCircle, AlertCircle, Share2, Award, Megaphone, 
-  FileText, ExternalLink, RefreshCw, Send, CheckCircle2, TrendingDown,
+  FileText, ExternalLink, RefreshCw, Send, CheckCircle2, TrendingUp,
   Lock, Landmark, X
 } from 'lucide-react';
 import asaeLogo from '../assets/images/asae_logo_1781797572399.jpg';
+const asaeMagazineCover = "https://scontent-cpt1-1.xx.fbcdn.net/v/t39.30808-6/748954486_122104178487391645_1818392376148665270_n.jpg?stp=dst-jpg_tt6&cstp=mx1086x1448&ctp=s1086x1448&_nc_cat=109&ccb=1-7&_nc_sid=127cfc&_nc_ohc=0a6hT1P-eqwQ7kNvwHDafWm&_nc_oc=AdphNSw-_TQarDlDTDZVh2dR1z8W6uOU3gmpSGGbQG1tXg0xUJIi1zlJopFPYCbYX0Q&_nc_zt=23&_nc_ht=scontent-cpt1-1.xx&_nc_gid=rNwxmTDOWoBdJ1lGy4k8vg&_nc_ss=7b2a8&oh=00_AQCwOUmObjO4_mlZDwi-yCf5fi8QteF8wnEZLMoPZ9MOcQ&oe=6A5DE73F";
 import { GooglePayButton } from './GooglePayButton';
 import { 
   isSupabaseConfigured,
   getSupabaseBlogs,
   getSupabaseAds
 } from '../lib/supabase';
+
+const EXCHANGE_RATES = {
+  ZAR: { symbol: 'R', rate: 1.0, name: 'RAND (ZAR)' },
+  USD: { symbol: '$', rate: 0.054, name: 'USD' },
+  EUR: { symbol: '€', rate: 0.050, name: 'EURO' },
+  AOA: { symbol: 'Kz', rate: 46.50, name: 'AO (AOA)' },
+};
+
+const convertUsdTo = (amountUsd: number, targetCurr: 'ZAR' | 'USD' | 'EUR' | 'AOA') => {
+  if (targetCurr === 'USD') return amountUsd;
+  const amountZar = amountUsd / EXCHANGE_RATES.USD.rate;
+  return amountZar * EXCHANGE_RATES[targetCurr].rate;
+};
+
+const formatAdPrice = (amountUsd: number, curr: 'ZAR' | 'USD' | 'EUR' | 'AOA') => {
+  const converted = convertUsdTo(amountUsd, curr);
+  if (curr === 'AOA') {
+    return `${EXCHANGE_RATES[curr].symbol} ${converted.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
+  return `${EXCHANGE_RATES[curr].symbol}${converted.toFixed(2)}`;
+};
 
 // Define Article interface
 interface Article {
@@ -265,6 +287,9 @@ export function NewsPortal() {
   const [magazinePurchaseSuccess, setMagazinePurchaseSuccess] = useState(false);
   const [magazineTxId, setMagazineTxId] = useState('');
   const [magazineEmail, setMagazineEmail] = useState('');
+  const [magazineFormat, setMagazineFormat] = useState<'digital' | 'hard'>('digital');
+  const [magazineCurrency, setMagazineCurrency] = useState<'ZAR' | 'USD' | 'EUR' | 'AOA'>('ZAR');
+  const [magazineShippingAddress, setMagazineShippingAddress] = useState('');
 
   // Load articles state (combining localStorage 'blogs' with ARTICLES)
   const [articles, setArticles] = useState<Article[]>(() => {
@@ -544,6 +569,7 @@ export function NewsPortal() {
   const [brandEmail, setBrandEmail] = useState('');
   const [selectedAdTier, setSelectedAdTier] = useState<'leaderboard' | 'sidebar' | 'infeed' | 'sponsored-post'>('leaderboard');
   const [adDurationMonths, setAdDurationMonths] = useState<number>(3);
+  const [adCurrency, setAdCurrency] = useState<'ZAR' | 'USD' | 'EUR' | 'AOA'>('USD');
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   // Advertiser mock analytics metrics
@@ -1166,27 +1192,28 @@ export function NewsPortal() {
                 
                 {/* Magazine mockup representation */}
                 <div className="bg-gradient-to-br from-neutral-900 to-black border border-white/10 rounded-xl p-4 relative overflow-hidden flex gap-4 shadow-inner group-hover:border-gold/20 duration-300 transition-all">
-                  <div className="w-24 h-32 bg-gradient-to-b from-gold via-[#111] to-black rounded-lg border border-gold/40 flex flex-col justify-between p-2 shrink-0 shadow-lg relative overflow-hidden">
-                    <div className="absolute inset-y-0 left-0 w-1.5 bg-black/40 blur-[1px]" />
-                    <span className="font-serif text-[10px] font-black text-gold tracking-widest uppercase">ASAE</span>
-                    <div className="space-y-0.5 text-center my-auto">
-                      <span className="text-[6px] font-mono text-ivory/60 block tracking-widest uppercase text-center">BILATERAL</span>
-                      <span className="text-[7px] font-serif text-gold block font-bold uppercase text-center">REVIEW</span>
-                    </div>
-                    <span className="text-[4px] font-mono text-gold-pale/50 block text-right">VOL. 5</span>
+                  <div className="w-24 h-32 shrink-0 shadow-xl rounded-lg overflow-hidden border border-gold/30 relative">
+                    <img 
+                      src={asaeMagazineCover} 
+                      alt="ASAE Magazine Cover" 
+                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                      referrerPolicy="no-referrer"
+                    />
+                    <div className="absolute inset-y-0 left-0 w-1 bg-black/30 pointer-events-none" />
                   </div>
                   
-                  <div className="flex flex-col justify-between">
+                  <div className="flex flex-col justify-between py-1 flex-1">
                     <div>
                       <h4 className="font-serif text-sm font-bold text-ivory group-hover:text-gold transition-colors leading-tight">
                         ASAE Bilateral Business Review
                       </h4>
-                      <p className="text-[10px] text-dim leading-snug mt-1">
+                      <p className="text-[10px] text-dim leading-relaxed mt-1.5">
                         Unlocking bilateral economic corridors, sovereign investment directories, and leadership insights inside SADC.
                       </p>
                     </div>
-                    <div className="text-[10px] font-mono text-gold font-bold">
-                      PRICE: R249.00 ZAR
+                    <div className="text-[10px] font-mono text-gold font-bold mt-2 flex flex-col gap-1">
+                      <span>DIGITAL: R100.00 ZAR</span>
+                      <span>HARD COPY: R249.00 ZAR</span>
                     </div>
                   </div>
                 </div>
@@ -1493,6 +1520,30 @@ export function NewsPortal() {
                         </div>
                       </div>
 
+                      {/* Currency Selector */}
+                      <div className="space-y-2 mt-2 bg-dark/20 p-2.5 border border-white/5 rounded-xl">
+                        <label className="block text-[9px] font-mono uppercase text-gold">Sponsorship Currency</label>
+                        <div className="grid grid-cols-4 gap-1 mt-1">
+                          {(['USD', 'ZAR', 'EUR', 'AOA'] as const).map((curr) => {
+                            const config = EXCHANGE_RATES[curr];
+                            return (
+                              <button
+                                key={curr}
+                                type="button"
+                                onClick={() => setAdCurrency(curr)}
+                                className={`py-1.5 text-center border rounded font-mono text-[9px] uppercase tracking-wider cursor-pointer transition-all ${
+                                  adCurrency === curr
+                                    ? 'border-gold bg-gold/15 text-gold font-bold shadow-sm'
+                                    : 'border-white/5 bg-dark-card text-dim hover:text-ivory'
+                                }`}
+                              >
+                                {curr} ({config.symbol})
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
                       {/* Display calculations box */}
                       <div className="p-4 bg-dark-card border border-gold/10 rounded-lg space-y-3">
                         <div className="flex justify-between items-center text-xs font-mono">
@@ -1507,7 +1558,7 @@ export function NewsPortal() {
                         </div>
                         <div className="flex justify-between items-center text-sm pt-2 border-t border-white/5">
                           <span className="font-serif font-bold text-ivory">Estimated Sponsorship Cost:</span>
-                          <span className="text-gold font-bold font-mono text-lg">${calculatedCost.toLocaleString()} USD</span>
+                          <span className="text-gold font-bold font-mono text-lg">{formatAdPrice(calculatedCost, adCurrency)}</span>
                         </div>
                       </div>
 
@@ -1531,12 +1582,35 @@ export function NewsPortal() {
                             className="bg-dark-card border border-white/10 rounded px-3 py-2 text-xs focus:border-gold focus:outline-none text-ivory"
                           />
                         </div>
-                        <button
-                          type="submit"
-                          className="w-full py-3 bg-gradient-to-br from-gold to-gold-light text-dark font-sans text-xs font-black tracking-widest rounded uppercase hover:shadow-lg transition-transform cursor-pointer"
-                        >
-                          SUBMIT SECURE CAMPAIGN INQUIRY
-                        </button>
+                        <div className="grid grid-cols-1 gap-2 pt-2">
+                          <button
+                            type="submit"
+                            className="w-full py-3 bg-gradient-to-br from-gold to-gold-light text-dark font-sans text-xs font-black tracking-widest rounded uppercase hover:shadow-lg transition-transform cursor-pointer"
+                          >
+                            SUBMIT SECURE CAMPAIGN INQUIRY
+                          </button>
+
+                          {brandName && brandEmail && (
+                            <div className="pt-2 border-t border-white/5">
+                              <span className="text-[9px] font-mono text-dim block text-center mb-1">OR INSTANT SPONSORSHIP CHECKOUT</span>
+                              <GooglePayButton
+                                ticket={{
+                                  name: `${priceList[selectedAdTier].name} (${adDurationMonths} mo)`,
+                                  price: convertUsdTo(calculatedCost, adCurrency),
+                                  priceZAR: convertUsdTo(calculatedCost, 'ZAR'),
+                                  currency: adCurrency,
+                                  quantity: 1
+                                }}
+                                currencyCode={adCurrency}
+                                onSuccess={() => {
+                                  setFormSubmitted(true);
+                                  setBrandName('');
+                                  setBrandEmail('');
+                                }}
+                              />
+                            </div>
+                          )}
+                        </div>
                       </div>
 
                     </form>
@@ -1678,12 +1752,60 @@ export function NewsPortal() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-dark-card border border-white/10 rounded-2xl w-full max-w-md shadow-2xl relative overflow-hidden"
+              className="bg-dark-card border border-white/10 rounded-2xl w-full max-w-md md:max-w-[960px] md:w-[960px] md:h-[540px] md:aspect-[16/9] shadow-2xl relative overflow-hidden flex flex-col md:flex-row"
             >
               {/* Gold Top Strip */}
-              <div className="h-[3px] bg-gold" />
+              <div className="absolute top-0 left-0 right-0 h-[3px] bg-gold z-10" />
 
-              <div className="p-6 md:p-8 space-y-6">
+              {/* Left Column (Premium Visual Preview) - Hidden on Mobile, Beautiful 16:9 Aspect Support on Desktop */}
+              <div className="hidden md:flex md:w-[360px] shrink-0 bg-[#0c0c0d]/80 border-r border-white/5 relative flex-col justify-between p-8 pt-10 overflow-hidden animate-fadeIn">
+                {/* Ambient glowing accent */}
+                <div className="absolute top-0 left-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl -translate-x-12 -translate-y-12 pointer-events-none" />
+                
+                <div className="space-y-3 z-10">
+                  <div className="inline-flex items-center gap-1.5 text-[8px] font-mono bg-gold/15 text-gold px-2.5 py-1 rounded-full uppercase tracking-widest font-bold">
+                    <Sparkles size={10} /> SADC SPECIAL EDITION
+                  </div>
+                  <h3 className="font-serif text-xl font-bold text-ivory leading-tight pt-2">
+                    ASAE Bilateral Business Review
+                  </h3>
+                  <p className="text-[11px] text-dim leading-relaxed">
+                    Access high-resolution intelligence papers, bilateral trade maps, investment directories, and elite ministerial interviews from South Africa and Angola.
+                  </p>
+                </div>
+
+                {/* Large Centerpiece Showcase */}
+                <div className="z-10 flex flex-col items-center justify-center py-2">
+                  <div className="w-40 h-56 shrink-0 shadow-[0_20px_45px_rgba(212,175,55,0.28)] rounded-lg overflow-hidden border border-gold/50 relative group transition-transform duration-300 hover:scale-105">
+                    <img 
+                      src={asaeMagazineCover} 
+                      alt="ASAE Magazine Cover" 
+                      className="w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                    {/* Spine shading */}
+                    <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-r from-black/65 via-black/20 to-transparent pointer-events-none" />
+                    {/* Highlight glare */}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/10 pointer-events-none" />
+                  </div>
+                  <div className="text-center mt-3 space-y-0.5">
+                    <span className="text-[8px] font-mono text-gold-pale uppercase tracking-widest block font-black">
+                      {magazineFormat === 'digital' ? 'Digital PDF Review' : 'Printed Hard Copy + PDF'}
+                    </span>
+                    <span className="text-[10px] text-dim font-mono block">
+                      Base Spec: {magazineFormat === 'digital' ? 'R100.00 ZAR' : 'R249.00 ZAR'}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="z-10 pt-2 border-t border-white/5">
+                  <span className="text-[8px] font-mono text-dim uppercase tracking-widest block">Secure Payment Node</span>
+                  <span className="text-[10px] font-mono text-gold font-bold block mt-0.5">ASAE MERCHANT CORE v2.6</span>
+                </div>
+              </div>
+
+              {/* Right Column (Scrollable Form Container) */}
+              <div className="flex-1 p-6 md:p-8 pt-8 md:pt-10 md:overflow-y-auto h-full flex flex-col justify-between space-y-4 relative text-left">
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="font-serif text-lg font-bold text-ivory">ASAE Magazine Checkout</h3>
@@ -1725,65 +1847,166 @@ export function NewsPortal() {
                     </button>
                   </div>
                 ) : (
-                  <div className="space-y-4 text-left">
+                  <div className="space-y-4">
                     <div className="bg-dark/50 border border-white/5 rounded-xl p-4 flex gap-4 items-center">
-                      <div className="w-14 h-20 bg-gradient-to-b from-gold via-neutral-900 to-black rounded border border-gold/30 flex flex-col justify-between p-1.5 shrink-0">
-                        <span className="font-serif text-[7px] font-black text-gold tracking-widest uppercase">ASAE</span>
-                        <div className="text-[5px] font-serif text-gold block font-bold uppercase text-center">BILATERAL REVIEW</div>
-                        <span className="text-[3px] font-mono text-gold-pale/50 block text-right">VOL. 5</span>
+                      <div className="w-16 h-24 shrink-0 shadow-lg rounded overflow-hidden border border-gold/40 relative">
+                        <img 
+                          src={asaeMagazineCover} 
+                          alt="ASAE Magazine Cover" 
+                          className="w-full h-full object-cover"
+                          referrerPolicy="no-referrer"
+                        />
                       </div>
                       <div>
-                        <span className="text-[9px] font-mono text-gold uppercase tracking-widest">Digital PDF + Printed Review</span>
+                        <span className="text-[9px] font-mono text-gold uppercase tracking-widest">
+                          {magazineFormat === 'digital' ? 'Digital PDF Review' : 'Printed Review + Digital PDF'}
+                        </span>
                         <h4 className="font-serif text-xs font-bold text-ivory mt-0.5">2026 SADC Economic Edition</h4>
-                        <p className="text-[10px] text-dim leading-snug mt-1 font-sans">Instant delivery to your business email inbox.</p>
+                        <p className="text-[10px] text-dim leading-snug mt-1 font-sans">
+                          {magazineFormat === 'digital' 
+                            ? 'Instant delivery to your business email inbox.' 
+                            : 'Shipped to your physical address & emailed instantly.'}
+                        </p>
                       </div>
                     </div>
 
-                    <div className="flex justify-between items-center py-2 border-y border-white/5 font-mono text-xs">
-                      <span className="text-dim">Subtotal:</span>
-                      <span className="text-ivory font-bold">R249.00 ZAR</span>
-                    </div>
-
-                    <div className="space-y-3">
-                      <div>
-                        <label className="block text-[10px] font-mono uppercase text-gold mb-1.5">Business Email Address *</label>
-                        <input
-                          type="email"
-                          required
-                          placeholder="e.g. executive@sa-angola-trade.com"
-                          value={magazineEmail}
-                          onChange={(e) => setMagazineEmail(e.target.value)}
-                          className="w-full bg-dark border border-white/10 rounded-lg py-2.5 px-3 text-xs text-ivory focus:outline-none focus:border-gold placeholder-dim"
-                        />
-                      </div>
-
-                      <div className="pt-2">
-                        <label className="block text-[10px] font-mono uppercase text-dim mb-2">Secure One-Click Payment</label>
-                        <GooglePayButton 
-                          ticket={{ name: "ASAE Magazine 2026", priceZAR: 249, quantity: 1 }}
-                          onSuccess={(details) => {
-                            setMagazineTxId(details?.txId || 'TX-' + Math.floor(Math.random() * 900000 + 100000));
-                            setMagazinePurchaseSuccess(true);
-                          }}
-                        />
-                      </div>
-
-                      <div className="pt-2">
+                    {/* Format Selector */}
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-mono uppercase text-gold">Choose Format</label>
+                      <div className="grid grid-cols-2 gap-2 bg-dark/40 p-1 border border-white/5 rounded-lg">
                         <button
-                          onClick={() => {
-                            if (!magazineEmail || !magazineEmail.includes('@')) {
-                              alert('Please enter a valid business email address first.');
-                              return;
-                            }
-                            setMagazineTxId('TX-' + Math.floor(Math.random() * 900000 + 100000));
-                            setMagazinePurchaseSuccess(true);
-                          }}
-                          className="w-full py-2.5 border border-white/10 hover:bg-white/5 text-[10px] text-dim hover:text-ivory font-sans font-bold tracking-widest uppercase rounded-lg transition-all cursor-pointer"
+                          type="button"
+                          onClick={() => setMagazineFormat('digital')}
+                          className={`py-2 text-center rounded-md font-sans text-[10px] uppercase font-bold tracking-wider cursor-pointer transition-all ${
+                            magazineFormat === 'digital'
+                              ? 'bg-gold text-dark font-black shadow-md'
+                              : 'text-dim hover:text-ivory hover:bg-white/5'
+                          }`}
                         >
-                          PAY WITH CARD INSTEAD
+                          Digital Copy (R100.00)
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setMagazineFormat('hard')}
+                          className={`py-2 text-center rounded-md font-sans text-[10px] uppercase font-bold tracking-wider cursor-pointer transition-all ${
+                            magazineFormat === 'hard'
+                              ? 'bg-gold text-dark font-black shadow-md'
+                              : 'text-dim hover:text-ivory hover:bg-white/5'
+                          }`}
+                        >
+                          Hard Copy (R249.00)
                         </button>
                       </div>
                     </div>
+
+                    {/* Currency Selector */}
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-mono uppercase text-gold">Purchase Currency</label>
+                      <div className="grid grid-cols-4 gap-1.5">
+                        {(['ZAR', 'USD', 'EUR', 'AOA'] as const).map((curr) => {
+                          const config = EXCHANGE_RATES[curr];
+                          return (
+                            <button
+                              key={curr}
+                              type="button"
+                              onClick={() => setMagazineCurrency(curr)}
+                              className={`py-1.5 text-center border rounded-md font-mono text-[10px] uppercase tracking-wider cursor-pointer transition-all ${
+                                magazineCurrency === curr
+                                  ? 'border-gold/60 bg-gold/10 text-gold font-bold shadow-sm'
+                                  : 'border-white/5 bg-dark/20 text-dim hover:text-ivory hover:bg-white/5'
+                              }`}
+                            >
+                              {curr} ({config.symbol})
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Dynamic Pricing Calculation */}
+                    {(() => {
+                      const basePriceZAR = magazineFormat === 'digital' ? 100 : 249;
+                      const currentRate = EXCHANGE_RATES[magazineCurrency].rate;
+                      const convertedPrice = basePriceZAR * currentRate;
+                      const formattedSubtotal = magazineCurrency === 'AOA'
+                        ? `${EXCHANGE_RATES[magazineCurrency].symbol} ${convertedPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                        : `${EXCHANGE_RATES[magazineCurrency].symbol}${convertedPrice.toFixed(2)}`;
+
+                      return (
+                        <>
+                          <div className="flex justify-between items-center py-2 border-y border-white/5 font-mono text-xs">
+                            <span className="text-dim">Subtotal ({magazineCurrency}):</span>
+                            <span className="text-gold font-bold">{formattedSubtotal}</span>
+                          </div>
+
+                          <div className="space-y-3">
+                            <div>
+                              <label className="block text-[10px] font-mono uppercase text-gold mb-1.5">Business Email Address *</label>
+                              <input
+                                type="email"
+                                required
+                                placeholder="e.g. executive@sa-angola-trade.com"
+                                value={magazineEmail}
+                                onChange={(e) => setMagazineEmail(e.target.value)}
+                                className="w-full bg-dark border border-white/10 rounded-lg py-2 px-3 text-xs text-ivory focus:outline-none focus:border-gold placeholder-dim"
+                              />
+                            </div>
+
+                            {magazineFormat === 'hard' && (
+                              <div className="animate-fadeIn">
+                                <label className="block text-[10px] font-mono uppercase text-gold mb-1.5">Shipping / Delivery Address *</label>
+                                <textarea
+                                  required
+                                  rows={2}
+                                  placeholder="e.g. 120 Albertina Sisulu Rd, Johannesburg, 2001, South Africa"
+                                  value={magazineShippingAddress}
+                                  onChange={(e) => setMagazineShippingAddress(e.target.value)}
+                                  className="w-full bg-dark border border-white/10 rounded-lg py-2 px-3 text-xs text-ivory focus:outline-none focus:border-gold placeholder-dim resize-none"
+                                />
+                              </div>
+                            )}
+
+                            <div className="pt-2">
+                              <label className="block text-[10px] font-mono uppercase text-dim mb-2">Secure One-Click Payment</label>
+                              <GooglePayButton 
+                                ticket={{ 
+                                  name: `ASAE Magazine 2026 (${magazineFormat === 'digital' ? 'Digital Copy' : 'Hard Copy'})`, 
+                                  price: convertedPrice, 
+                                  priceZAR: basePriceZAR,
+                                  currency: magazineCurrency,
+                                  quantity: 1 
+                                }}
+                                currencyCode={magazineCurrency}
+                                onSuccess={(details) => {
+                                  setMagazineTxId(details?.txId || 'TX-' + Math.floor(Math.random() * 900000 + 100000));
+                                  setMagazinePurchaseSuccess(true);
+                                }}
+                              />
+                            </div>
+
+                            <div className="pt-2">
+                              <button
+                                onClick={() => {
+                                  if (!magazineEmail || !magazineEmail.includes('@')) {
+                                    alert('Please enter a valid business email address first.');
+                                    return;
+                                  }
+                                  if (magazineFormat === 'hard' && !magazineShippingAddress.trim()) {
+                                    alert('Please enter a shipping address for Hard Copy delivery.');
+                                    return;
+                                  }
+                                  setMagazineTxId('TX-' + Math.floor(Math.random() * 900000 + 100000));
+                                  setMagazinePurchaseSuccess(true);
+                                }}
+                                className="w-full py-2.5 border border-white/10 hover:bg-white/5 text-[10px] text-dim hover:text-ivory font-sans font-bold tracking-widest uppercase rounded-lg transition-all cursor-pointer"
+                              >
+                                PAY WITH CARD INSTEAD
+                              </button>
+                            </div>
+                          </div>
+                        </>
+                      );
+                    })()}
                   </div>
                 )}
               </div>

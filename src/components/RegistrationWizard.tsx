@@ -51,6 +51,21 @@ const CATEGORIES: Category[] = [
   { id: 'virtual', name: 'Virtual Delegate', description: 'Online attendance with access to full live streams', priceZar: 500, priceUsd: 30 },
 ];
 
+const EXCHANGE_RATES = {
+  ZAR: { symbol: 'R', rate: 1.0, name: 'RAND (ZAR)' },
+  USD: { symbol: '$', rate: 0.054, name: 'USD' },
+  EUR: { symbol: '€', rate: 0.050, name: 'EURO' },
+  AOA: { symbol: 'Kz', rate: 46.50, name: 'AO (AOA)' },
+};
+
+const formatPrice = (priceZar: number, curr: 'ZAR' | 'USD' | 'EUR' | 'AOA') => {
+  const converted = priceZar * EXCHANGE_RATES[curr].rate;
+  if (curr === 'AOA') {
+    return `${EXCHANGE_RATES[curr].symbol} ${converted.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
+  return `${EXCHANGE_RATES[curr].symbol}${converted.toFixed(2)}`;
+};
+
 interface RegistrationWizardProps {
   initialCategory?: string; // matching 'student' | 'professional' | 'individual' | 'company' | 'vip' | 'virtual'
   onClose: () => void;
@@ -77,6 +92,7 @@ export function RegistrationWizard({ initialCategory, onClose }: RegistrationWiz
 
   // Payment states
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'gpay' | 'bank' | 'momo' | 'intel'>('card');
+  const [ticketCurrency, setTicketCurrency] = useState<'ZAR' | 'USD' | 'EUR' | 'AOA'>('ZAR');
   const [processingState, setProcessingState] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -718,22 +734,43 @@ export function RegistrationWizard({ initialCategory, onClose }: RegistrationWiz
 
                     <div className="col-span-2 border-t border-white/5 pt-4 mt-2">
                        <h5 className="text-[10px] font-mono text-dim uppercase tracking-wider mb-2">FEE AND TAX RECOGNITION</h5>
+                       
+                       {/* Currency Selector */}
+                       <div className="space-y-1.5 mb-3 bg-dark/30 p-2.5 border border-white/5 rounded-lg">
+                         <label className="block text-[9px] font-mono uppercase text-gold">Select Payment Currency</label>
+                         <div className="grid grid-cols-4 gap-1 mt-1">
+                           {(['ZAR', 'USD', 'EUR', 'AOA'] as const).map((curr) => {
+                             const config = EXCHANGE_RATES[curr];
+                             return (
+                               <button
+                                 key={curr}
+                                 type="button"
+                                 onClick={() => setTicketCurrency(curr)}
+                                 className={`py-1 text-center border rounded font-mono text-[9px] uppercase tracking-wider cursor-pointer transition-all ${
+                                   ticketCurrency === curr
+                                     ? 'border-gold bg-gold/15 text-gold font-bold shadow-sm'
+                                     : 'border-white/5 bg-dark text-dim hover:text-ivory'
+                                 }`}
+                               >
+                                 {curr} ({config.symbol})
+                               </button>
+                             );
+                           })}
+                         </div>
+                       </div>
+
                        <div className="space-y-2 font-mono text-xs text-ivory/80">
                          <div className="flex justify-between">
                            <span>Seating Conference Fee</span>
-                           <span className="font-bold">R{selectedCategory.priceZar.toLocaleString()}</span>
+                           <span className="font-bold">{formatPrice(selectedCategory.priceZar, ticketCurrency)}</span>
                          </div>
                          <div className="flex justify-between">
                            <span>Regulatory VAT (0%)</span>
-                           <span>R0</span>
+                           <span>{EXCHANGE_RATES[ticketCurrency].symbol}0</span>
                          </div>
                          <div className="flex justify-between text-base font-serif font-black text-gold border-t border-white/5 pt-3">
                            <span>NET TRANSACTION TOTAL</span>
-                           <span>R{selectedCategory.priceZar.toLocaleString()}</span>
-                         </div>
-                         <div className="flex justify-between text-[11px] text-dim font-sans">
-                           <span>Foreign Exchange Equivalent</span>
-                           <span>~ USD {selectedCategory.priceUsd.toLocaleString()}</span>
+                           <span className="font-black">{formatPrice(selectedCategory.priceZar, ticketCurrency)}</span>
                          </div>
                        </div>
                     </div>
@@ -914,7 +951,7 @@ export function RegistrationWizard({ initialCategory, onClose }: RegistrationWiz
                             onClick={startStripeFlow}
                             className="w-full py-3 mt-4 bg-gold hover:bg-gold-light text-dark font-sans font-bold text-xs uppercase tracking-wider rounded-lg transition-all shadow-lg"
                           >
-                            Pay R{selectedCategory.priceZar.toLocaleString()} Now
+                            Pay {formatPrice(selectedCategory.priceZar, ticketCurrency)} Now
                           </button>
                         </div>
                       )}
@@ -932,7 +969,14 @@ export function RegistrationWizard({ initialCategory, onClose }: RegistrationWiz
 
                           <div className="p-6 bg-dark rounded-xl border border-white/5">
                             <GooglePayButton 
-                              amountZar={selectedCategory.priceZar} 
+                              ticket={{
+                                name: `ASAE Excellence Summit Seating — ${selectedCategory.name}`,
+                                price: selectedCategory.priceZar * EXCHANGE_RATES[ticketCurrency].rate,
+                                priceZAR: selectedCategory.priceZar,
+                                currency: ticketCurrency,
+                                quantity: 1
+                              }}
+                              currencyCode={ticketCurrency}
                               onSuccess={(status) => handlePaymentSuccess(status as 'Paid' | 'Pending')} 
                               onStartFlow={() => {}} 
                             />
@@ -952,6 +996,7 @@ export function RegistrationWizard({ initialCategory, onClose }: RegistrationWiz
                             <div className="flex justify-between"><span className="text-dim">Recipient:</span> <strong className="text-gold-pale">ASAE Awards Group Ltd</strong></div>
                             <div className="flex justify-between"><span className="text-dim">Account Number:</span> <strong className="text-ivory">6289 4832 9013</strong></div>
                             <div className="flex justify-between"><span className="text-dim">SWIFT Protocol:</span> <strong className="text-ivory">FIRNZAJJ</strong></div>
+                            <div className="flex justify-between"><span className="text-dim">Amount Due:</span> <strong className="text-gold font-mono">{formatPrice(selectedCategory.priceZar, ticketCurrency)}</strong></div>
                             <div className="flex justify-between border-t border-white/10 pt-2 text-gold"><span className="font-bold">Required Reference:</span> <strong className="font-mono">ASAE-DEL-26-902</strong></div>
                           </div>
 
@@ -1055,7 +1100,7 @@ export function RegistrationWizard({ initialCategory, onClose }: RegistrationWiz
                               onChange={e => setMomoPhone(e.target.value)}
                               className="w-full bg-dark px-3.5 py-2 border border-white/10 rounded-lg text-xs placeholder-dim text-ivory focus:outline-none focus:border-gold"
                             />
-                            <p className="text-[9px] text-dim mt-1.5 leading-relaxed">System compiles direct API push to your phone. Review screen prompt on your device, type your security code, & accept.</p>
+                            <p className="text-[9px] text-dim mt-1.5 leading-relaxed">System compiles direct API push to your phone for {formatPrice(selectedCategory.priceZar, ticketCurrency)}. Review screen prompt on your device, type your security code, & accept.</p>
                           </div>
 
                           <button 
@@ -1078,7 +1123,7 @@ export function RegistrationWizard({ initialCategory, onClose }: RegistrationWiz
 
                           <div className="p-4 bg-dark rounded-xl border border-white/5 space-y-3">
                             <h6 className="font-serif text-xs text-gold-pale uppercase font-semibold">Redirect Handshake Details</h6>
-                            <p className="text-[11px] text-dim leading-relaxed">Clicking below opens a secure Flutterwave window representing R{selectedCategory.priceZar.toLocaleString()} (~ USD {selectedCategory.priceUsd}). Upon completion, the secure tokens return to confirm your delegate badge.</p>
+                            <p className="text-[11px] text-dim leading-relaxed">Clicking below opens a secure Flutterwave window representing {formatPrice(selectedCategory.priceZar, ticketCurrency)}. Upon completion, the secure tokens return to confirm your delegate badge.</p>
                           </div>
 
                           <button 
@@ -1338,7 +1383,7 @@ export function RegistrationWizard({ initialCategory, onClose }: RegistrationWiz
                         <thead>
                           <tr className="border-b border-white/10 text-dim text-[10px]">
                             <th className="py-2">SUMMIT PACKAGE SEATING DESCRIPTION</th>
-                            <th className="py-2 text-right">TOTAL (ZAR)</th>
+                            <th className="py-2 text-right">TOTAL ({ticketCurrency})</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1347,19 +1392,19 @@ export function RegistrationWizard({ initialCategory, onClose }: RegistrationWiz
                               ASAE Excellence Summit Seating — {selectedCategory.name} Full Seating Pack
                               <p className="text-[10px] text-dim font-sans mt-1">Includes Plenary Hall access, catering breakfasts, VIP lounge check-ins, and printed credentials.</p>
                             </td>
-                            <td className="py-3 text-right font-bold">R{selectedCategory.priceZar.toLocaleString()}</td>
+                            <td className="py-3 text-right font-bold">{formatPrice(selectedCategory.priceZar, ticketCurrency)}</td>
                           </tr>
                           <tr className="text-dim text-[11px]">
                             <td className="py-2 text-right">Seating Subtotal:</td>
-                            <td className="py-2 text-right">R{selectedCategory.priceZar.toLocaleString()}</td>
+                            <td className="py-2 text-right">{formatPrice(selectedCategory.priceZar, ticketCurrency)}</td>
                           </tr>
                           <tr className="text-dim text-[11px] border-b border-white/10">
                             <td className="py-2 text-right">VAT (0% Exempt Category):</td>
-                            <td className="py-2 text-right">R0</td>
+                            <td className="py-2 text-right">{EXCHANGE_RATES[ticketCurrency].symbol}0</td>
                           </tr>
                           <tr className="text-gold font-bold text-sm">
                             <td className="py-3 text-right">TOTAL INFLOW PAID:</td>
-                            <td className="py-3 text-right font-black">R{selectedCategory.priceZar.toLocaleString()}</td>
+                            <td className="py-3 text-right font-black">{formatPrice(selectedCategory.priceZar, ticketCurrency)}</td>
                           </tr>
                         </tbody>
                       </table>
