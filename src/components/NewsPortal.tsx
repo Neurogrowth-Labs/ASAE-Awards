@@ -1776,7 +1776,7 @@ export function NewsPortal() {
 
                 {/* Large Centerpiece Showcase */}
                 <div className="z-10 flex flex-col items-center justify-center py-2">
-                  <div className="w-40 h-56 shrink-0 shadow-[0_20px_45px_rgba(212,175,55,0.28)] rounded-lg overflow-hidden border border-gold/50 relative group transition-transform duration-300 hover:scale-105">
+                  <div className="w-32 h-44 shrink-0 shadow-[0_20px_45px_rgba(212,175,55,0.28)] rounded-lg overflow-hidden border border-gold/50 relative group transition-transform duration-300 hover:scale-105">
                     <img 
                       src={asaeMagazineCover} 
                       alt="ASAE Magazine Cover" 
